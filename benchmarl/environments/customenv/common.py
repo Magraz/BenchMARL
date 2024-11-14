@@ -9,9 +9,8 @@ from typing import Callable, Dict, List, Optional
 from benchmarl.environments.common import Task
 from benchmarl.utils import DEVICE_TYPING
 
-from tensordict import TensorDictBase
-from torchrl.data import CompositeSpec
 from torchrl.envs import EnvBase
+from torchrl.data import Composite
 
 # from torchrl.envs.libs import YourTorchRLEnvConstructor
 from vmas import make_env
@@ -70,57 +69,48 @@ class CustomEnvTask(Task):
         )
 
     def supports_continuous_actions(self) -> bool:
-        # Does the environment support continuous actions?
         return True
 
     def supports_discrete_actions(self) -> bool:
-        # Does the environment support discrete actions?
         return True
 
     def has_render(self, env: EnvBase) -> bool:
-        # Does the env have a env.render(mode="rgb_array") or env.render() function?
         return True
 
     def max_steps(self, env: EnvBase) -> int:
-        # Maximum number of steps for a rollout during evaluation
-        return 100
+        return self.config["max_steps"]
 
     def group_map(self, env: EnvBase) -> Dict[str, List[str]]:
-        # The group map mapping group names to agent names
-        # The data in the tensordict will havebe presented this way
+        if hasattr(env, "group_map"):
+            return env.group_map
         return {"agents": [agent.name for agent in env.agents]}
 
-    def observation_spec(self, env: EnvBase) -> CompositeSpec:
-        # A spec for the observation.
-        # Must be a CompositeSpec with one (group_name, observation_key) entry per group.
-        return env.full_observation_spec
-
-    def action_spec(self, env: EnvBase) -> CompositeSpec:
-        # A spec for the action.
-        # If provided, must be a CompositeSpec with one (group_name, "action") entry per group.
-        return env.full_action_spec
-
-    def state_spec(self, env: EnvBase) -> Optional[CompositeSpec]:
-        # A spec for the state.
-        # If provided, must be a CompositeSpec with one "state" entry
+    def state_spec(self, env: EnvBase) -> Optional[Composite]:
         return None
 
-    def action_mask_spec(self, env: EnvBase) -> Optional[CompositeSpec]:
-        # A spec for the action mask.
-        # If provided, must be a CompositeSpec with one (group_name, "action_mask") entry per group.
+    def action_mask_spec(self, env: EnvBase) -> Optional[Composite]:
         return None
 
-    def info_spec(self, env: EnvBase) -> Optional[CompositeSpec]:
-        # A spec for the info.
-        # If provided, must be a CompositeSpec with one (group_name, "info") entry per group (this entry can be composite).
-        return None
+    def observation_spec(self, env: EnvBase) -> Composite:
+        observation_spec = env.unbatched_observation_spec.clone()
+        for group in self.group_map(env):
+            if "info" in observation_spec[group]:
+                del observation_spec[(group, "info")]
+        return observation_spec
+
+    def info_spec(self, env: EnvBase) -> Optional[Composite]:
+        info_spec = env.unbatched_observation_spec.clone()
+        for group in self.group_map(env):
+            del info_spec[(group, "observation")]
+        for group in self.group_map(env):
+            if "info" in info_spec[group]:
+                return info_spec
+        else:
+            return None
+
+    def action_spec(self, env: EnvBase) -> Composite:
+        return env.unbatched_action_spec
 
     @staticmethod
     def env_name() -> str:
-        # The name of the environment in the benchmarl/conf/task folder
         return "customenv"
-
-    def log_info(self, batch: TensorDictBase) -> Dict[str, float]:
-        # Optionally return a str->float dict with extra things to log
-        # This function has access to the collected batch and is optional
-        return {}
