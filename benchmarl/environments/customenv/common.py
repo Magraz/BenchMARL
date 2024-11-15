@@ -22,12 +22,9 @@ from vmas_salp.domain.create_env import create_env
 from pathlib import Path
 
 
-class CustomEnvTask(Task):
+class SalpTask(Task):
     # Your task names.
     # Their config will be loaded from conf/task/customenv
-
-    SALP = None  # Loaded automatically from conf/task/customenv/task_1
-    # TASK_2 = None  # Loaded automatically from conf/task/customenv/task_2
 
     def get_env_fun(
         self,
