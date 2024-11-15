@@ -26,7 +26,7 @@ class CustomEnvTask(Task):
     # Your task names.
     # Their config will be loaded from conf/task/customenv
 
-    TASK_1 = None  # Loaded automatically from conf/task/customenv/task_1
+    SALP = None  # Loaded automatically from conf/task/customenv/task_1
     # TASK_2 = None  # Loaded automatically from conf/task/customenv/task_2
 
     def get_env_fun(
@@ -36,30 +36,10 @@ class CustomEnvTask(Task):
         seed: Optional[int],
         device: DEVICE_TYPING,
     ) -> Callable[[], EnvBase]:
-        # return lambda: YourTorchRLEnvConstructor(
-        #     scenario=self.name.lower(),
-        #     num_envs=num_envs,  # Number of vectorized envs (do not use this param if the env is not vectorized)
-        #     continuous_actions=continuous_actions,  # Ignore this param if your env does not have this choice
-        #     seed=seed,
-        #     device=device,
-        #     categorical_actions=True,  # If your env has discrete actions, they need to be categorical (TorchRL can help with this)
-        #     **self.config,  # Pass the loaded config (this is what is in your yaml
-        # )
-        # return lambda: make_env(
-        #                 scenario=self.name.lower,
-        #                 num_envs=num_envs,
-        #                 device=device,
-        #                 continuous_actions=continuous_actions,
-        #                 seed=seed,
-        #                 # dict_spaces=dict_spaces,
-        #                 wrapper=None,
-        #                 seed=None,
-        #                 # Environment specific variables
-        #                 # **kwargs,
-        #                 **self.config,
-        #             )
+
         here = Path(__file__).resolve()
         bm = here.parents[2]
+
         return lambda: create_env(
             batch_dir=bm / "conf" / "task" / "customenv",
             n_envs=num_envs,
