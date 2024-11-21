@@ -1,10 +1,10 @@
 
 name: mlp
 
-num_cells: [256, 256]
+num_cells: [128, 128]
 layer_class: torch.nn.Linear
 
-activation_class: torch.nn.Tanh
+activation_class: torch.nn.Sigmoid
 activation_kwargs: null
 
 norm_class: null

@@ -1,36 +1,107 @@
-# May need to rename to _env.yaml
-max_steps: 1000
-map_size: [2.0, 4.0]
-use_order: False
-obs_space_dim: 4
-action_space_dim: 2
+max_steps: 300
+map_size: [3.0, 3.0]
+obs_space_dim: 20
+action_space_dim: 1
+shuffle_agents_positions: true
 
-rovers:
-  - observation_radius: 1
-    type: 0
-    position:
-      spawn_rule: fixed
-      coordinates: [-0.1, -1.0]
-  
-  - observation_radius: 1
-    type: 0
-    position:
-      spawn_rule: fixed
-      coordinates: [0.0, -1.0]
-  
-  - observation_radius: 1
-    type: 0
-    position:
-      spawn_rule: fixed
-      coordinates: [0.1, -1.0]
-
-pois:
-  - value: 1.0
-    coupling: 2
-    observation_radius: 6
+agents:
+  - observation_radius: 4.0
     color: "GREEN"
+    position:
+      spawn_rule: fixed
+      coordinates: [-0.15, 0.0]
+  
+  - observation_radius: 4.0
+    color: "BLACK"
+    position:
+      spawn_rule: fixed
+      coordinates: [-0.1, 0.0]
+  
+  - observation_radius: 4.0
+    color: "BLUE"
+    position:
+      spawn_rule: fixed
+      coordinates: [-0.05, 0.0]
+  
+  - observation_radius: 4.0
+    color: "WHITE"
+    position:
+      spawn_rule: fixed
+      coordinates: [0.0, 0.0]
+  
+  - observation_radius: 4.0
+    color: "GRAY"
+    position:
+      spawn_rule: fixed
+      coordinates: [0.05, 0.0]
+  
+  - observation_radius: 4.0
+    color: "LIGHT_GREEN"
+    position:
+      spawn_rule: fixed
+      coordinates: [0.1, 0.0]
+  
+  - observation_radius: 4.0
+    color: "MAGENTA"
+    position:
+      spawn_rule: fixed
+      coordinates: [0.15, 0.0]
+  
+  - observation_radius: 4.0
+    color: "ORANGE"
+    position:
+      spawn_rule: fixed
+      coordinates: [0.3, 0.0]
+  
+  - observation_radius: 4.0
+    color: "RED"
+    position:
+      spawn_rule: fixed
+      coordinates: [0.3, 0.0]
+  
+  - observation_radius: 4.0
+    color: "PURPLE"
+    position:
+      spawn_rule: fixed
+      coordinates: [0.3, 0.0]
+
+targets:
+  - value: 1.0
+    coupling: 1
+    observation_radius: 7.0
+    color: "RED"
     type: 0
     order: 0
     position:
       spawn_rule: fixed
-      coordinates: [0.0, 3.0]
+      coordinates: [0.0, 2.0]
+  
+  # - value: 1.0
+  #   coupling: 4
+  #   observation_radius: 0.15
+  #   color: "RED"
+  #   type: 0
+  #   order: 0
+  #   position:
+  #     spawn_rule: fixed
+  #     coordinates: [0.0, 3.0]
+  
+  # - value: 1.0
+  #   coupling: 4
+  #   observation_radius: 0.15
+  #   color: "RED"
+  #   type: 0
+  #   order: 0
+  #   position:
+  #     spawn_rule: fixed
+  #     coordinates: [1.0, 3.0]
+
+  # - value: 1.0
+  #   coupling: 4
+  #   observation_radius: 0.15
+  #   color: "RED"
+  #   type: 0
+  #   order: 0
+  #   position:
+  #     spawn_rule: fixed
+  #     coordinates: [-1.0, -0.25]

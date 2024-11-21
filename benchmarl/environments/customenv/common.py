@@ -20,11 +20,13 @@ from vmas import make_env
 # from vmas_salp.domain.salp_domain import SalpDomain
 from vmas_salp.domain.create_env import create_env
 from pathlib import Path
-
+import yaml
 
 class SalpTask(Task):
     # Your task names.
     # Their config will be loaded from conf/task/customenv
+
+    SALP=None
 
     def get_env_fun(
         self,
@@ -37,9 +39,12 @@ class SalpTask(Task):
         here = Path(__file__).resolve()
         bm = here.parents[2]
 
+        batch_dir=bm / "conf" / "task" / "customenv"
+
         return lambda: create_env(
-            batch_dir=bm / "conf" / "task" / "customenv",
+            batch_dir=batch_dir,
             n_envs=num_envs,
+            n_agents=4,
             device=device,
             seed=seed,
             benchmark=True,
